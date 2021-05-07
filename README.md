@@ -13,11 +13,11 @@ Here you can find some code which hopefully makes integrating with [Montonio](ht
 
 ### Fetching the list of banks and credit card processors
 ```php
+    require_once 'lib/MontonioPayments/MontonioPaymentsSDK.php';
+
     $accessKey = 'your_access_key';
     $secretKey = 'your_secret_key';
     $env = 'sandbox'; // or 'production'
-
-    require_once 'lib/MontonioPayments/MontonioPaymentsSDK.php';
 
     $sdk = new MontonioPaymentsSDK(
         $accessKey,
@@ -180,6 +180,8 @@ echo $baseUrl . '?access_token=' . $accessToken;
 
 ### Validating the loan application
 ```php
+require_once 'lib/MontonioFinancing/MontonioFinancingSDK.php';
+
 // original order ID passed to merchant_reference
 $orderID = 'my-order-id-2';
 
