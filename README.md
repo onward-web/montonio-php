@@ -18,7 +18,6 @@ Here you can find some code which hopefully makes integrating with [Montonio](ht
     $env = 'sandbox'; // or 'production'
 
     require_once 'lib/MontonioPayments/MontonioPaymentsSDK.php';
-    require_once 'lib/MontonioPayments/MontonioPaymentsCheckout.php';
 
     $sdk = new MontonioPaymentsSDK(
         $accessKey,
@@ -48,6 +47,9 @@ Here you can find some code which hopefully makes integrating with [Montonio](ht
  */
 // *** @var $banklist ***
 
+require_once 'lib/MontonioPayments/MontonioPaymentsSDK.php';
+require_once 'lib/MontonioPayments/MontonioPaymentsCheckout.php';
+
 $checkout = new MontonioPaymentsCheckout();
 $checkout->set_description('Pay with your bank');
 $checkout->set_preferred_country('EE');
@@ -61,6 +63,8 @@ echo $html;
 
 ### Starting the payment
 ```php
+require_once 'lib/MontonioPayments/MontonioPaymentsSDK.php';
+
 $accessKey = 'your_access_key';
 $secretKey = 'your_secret_key';
 $env = 'sandbox'; // or 'production'
@@ -73,8 +77,8 @@ $sdk = new MontonioPaymentsSDK(
 
 $paymentData = array(
     'amount'                    => 5.00, // Make sure this is a float
-    'currency'                  => 'EUR', // currently only EUR is supported
-    'merchant_reference'        => 'my-order-id-1', // the id you can identify the order with
+    'currency'                  => 'EUR', // Currently only EUR is supported
+    'merchant_reference'        => 'my-order-id-1', // The order id in your system
     'merchant_name'             => 'Some Company OÜ',
     'checkout_email'            => 'test@montonio.com',
     'checkout_first_name'       => 'Montonio',
@@ -86,7 +90,7 @@ $paymentData = array(
     'preselected_aspsp'         => 'LHVBEE22', // The preselected ASPSP identifier
     // For card payments:
     // 'preselected_aspsp'         => 'CARD'
-    'preselected_locale'        => 'en' // see available locale options in the docs
+    'preselected_locale'        => 'en' // See available locale options in the docs
 );
 
 $sdk->setPaymentData($paymentData);
@@ -101,6 +105,8 @@ If the response does not have the ```payment_token``` query parameter, then the 
 This can happen if the user simply closed the payment application and returned to cart.
 
 ```php
+require_once 'lib/MontonioPayments/MontonioPaymentsSDK.php';
+
 // original order ID passed to merchant_reference
 $orderID = 'my-order-id-1';
 
@@ -116,8 +122,58 @@ if (
     $decoded->merchant_reference === $orderID &&
     $decoded->status === 'finalized'
 ) {
-    // payment completed
+    // Payment completed
 } else {
-    // payment not completed
+    // Payment not completed
 }
+```
+
+## Montonio Financing
+
+### Starting the loan application
+```php
+require_once 'lib/MontonioFinancing/MontonioFinancingSDK.php';
+
+$accessKey = 'your_access_key';
+$secretKey = 'your_secret_key';
+$env       = 'sandbox'; // or 'production'
+
+$montonioFinancing = new MontonioFinancingSDK(
+    $accessKey,
+    $secretKey,
+    $env
+);
+
+// Prepare data for loan application
+$data = array(
+    'origin'               => 'online',
+    'merchant_reference'   => 'my-order-id-2', // The Order Id in your system
+    'customer_first_name'  => 'Montonio',
+    'customer_last_name'   => 'Test',
+    'customer_email'       => 'test@montonio.com',
+    'customer_city'        => 'Tallinn',
+    'customer_address'     => 'Customer Address',
+    'customer_postal_code' => '11111',
+    'products'             => array(),
+    'notification_url'     => 'https://my-store/notify', // We will send a webhook after the payment is complete
+    'callback_url'         => 'https://my-store/return', // Where to redirect the customer to after the payment
+);
+
+// Add products
+$data['products'][] = array(
+    'quantity'      => (int) 1,
+    'product_name'  => 'Some product name',
+    'product_price' => 35.52,
+);
+
+// Get application draft
+$draftResult = $montonioFinancing->post_montonio_application_draft(json_encode($data));
+
+// handle draft request response
+$accessToken = ($draftResult['status'] === 'SUCCESS') ? $draftResult['data']->access_token : null;
+
+// Redirect to Montonio Financing
+$baseUrl = $env === 'sandbox' ? 'https://sandbox-application.montonio.com' : 'https://application.montonio.com';
+
+echo $baseUrl . '?access_token=' . $accessToken;
 ```
