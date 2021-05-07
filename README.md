@@ -47,7 +47,6 @@ Here you can find some code which hopefully makes integrating with [Montonio](ht
  */
 // *** @var $banklist ***
 
-require_once 'lib/MontonioPayments/MontonioPaymentsSDK.php';
 require_once 'lib/MontonioPayments/MontonioPaymentsCheckout.php';
 
 $checkout = new MontonioPaymentsCheckout();
