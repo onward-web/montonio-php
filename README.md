@@ -177,3 +177,32 @@ $baseUrl = $env === 'sandbox' ? 'https://sandbox-application.montonio.com' : 'ht
 
 echo $baseUrl . '?access_token=' . $accessToken;
 ```
+
+### Validating the loan application
+```php
+// original order ID passed to merchant_reference
+$orderID = 'my-order-id-2';
+
+$accessKey = 'your_access_key';
+$secretKey = 'your_secret_key';
+$env       = 'sandbox'; // or 'production'
+
+$montonioFinancing = new MontonioFinancingSDK(
+    $accessKey,
+    $secretKey,
+    $env
+);
+
+$request = $montonioFinancing->get_montonio_application($orderID);
+
+if ($request['status'] === 'SUCCESS') {
+
+    $response = $request['data'];
+
+    if ($response->status === 'signed') {
+        // Payment completed
+    } else {
+        // Payment not completed
+    }
+}
+```
