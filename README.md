@@ -97,6 +97,9 @@ echo $paymentUrl;
 ```
 
 ### Validating the payment
+If the response does not have the ```payment_token``` query parameter, then the payment did not reach a verdict.
+This can happen if the user simply closed the payment application and returned to cart.
+
 ```php
 // original order ID passed to merchant_reference
 $orderID = 'my-order-id-1';
