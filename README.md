@@ -95,3 +95,26 @@ $paymentUrl = $sdk->getPaymentUrl();
 // The payment URL customer should be redirected to
 echo $paymentUrl;
 ```
+
+### Validating the payment
+```php
+// original order ID passed to merchant_reference
+$orderID = 'my-order-id-1';
+
+// We send the payment_token query parameter upon successful payment
+// This is both with merchant_notification_url and merchant_return_url
+$token     = $_REQUEST['payment_token'];
+$secretKey = 'your_secret_key';
+
+$decoded = MontonioPaymentsSDK::decodePaymentToken($token, $secretKey);
+
+if (
+    $decoded->access_key === 'merchant_access_key' &&
+    $decoded->merchant_reference === $orderID &&
+    $decoded->status === 'finalized'
+) {
+    // payment completed
+} else {
+    // payment not completed
+}
+```
