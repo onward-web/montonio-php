@@ -129,7 +129,86 @@ if (
 
 ## Montonio Financing
 
-### Starting the loan application
+### Starting the financing application
+```php
+require_once 'lib/MontonioFinancing/MontonioFinancingSDK.php';
+
+$accessKey = 'your_access_key';
+$secretKey = 'your_environment';
+$env       = 'sandbox'; // or 'production'
+
+$montonioFinancing = new MontonioFinancingSDK(
+    $accessKey,
+    $secretKey,
+    $env
+);
+
+$paymentData = array(
+    'origin'                    => 'online',
+    'access_key'                => $accessKey,
+    'currency'                  => 'EUR',
+    'merchant_name'             => 'My Store OÜ',
+    'merchant_reference'        => 'my-order-id-1',
+    'checkout_first_name'       => 'Montonio',
+    'checkout_last_name'        => 'Test',
+    'checkout_email'            => 'test@montonio.com',
+    'checkout_city'             => 'Tallinn',
+    'checkout_address'          => 'Customer Address',
+    'checkout_postal_code'      => '11111',
+    'checkout_phone_number'     => '+37255555555',
+    'merchant_return_url'       => 'https://my-store/return', // Where to redirect the checkout to after the payment
+    'merchant_notification_url' => 'https://my-store/notify', // We will send a webhook after the payment is complete,
+    'preselected_loan_period'   => 12, // Optional
+    'products'                  => array(),
+    'preselected_locale'        => 'et'
+);
+
+// Add products
+$paymentData['checkout_products'][] = array(
+    'quantity'      => (int) 1,
+    'product_name'  => 'Some product name',
+    'product_price' => 35.52,
+);
+
+$montonioFinancing->setPaymentData($paymentData);
+$paymentUrl = $montonioFinancing->getPaymentUrl();
+
+echo $paymentUrl;
+```
+
+### Validating the financing application
+
+```php
+require_once 'lib/MontonioPayments/MontonioFinancingSDK.php';
+
+$secretKey = 'your_secret_key';
+
+// original order ID passed to merchant_reference
+$orderID = 'my-order-id-1';
+
+// We send the payment_token query parameter upon successful payment
+// This is both with merchant_notification_url and merchant_return_url
+$token     = $_REQUEST['payment_token'];
+$secretKey = 'your_secret_key';
+
+$decoded = MontonioFinancingSDK::decodePaymentToken($token, $secretKey);
+
+if (
+    $decoded->access_key === 'merchant_access_key' &&
+    $decoded->merchant_reference === $orderID &&
+    $decoded->status === 'finalized'
+) {
+    // Payment completed
+} else {
+    // Payment not completed
+}
+```
+
+
+## [DEPRECATED] Montonio Financing V1
+Please see the section above to integrate with Montonio Financing. This code here is to preserve examples for pre-existing integrations.
+
+### [Deprecated] Starting the loan application
 ```php
 require_once 'lib/MontonioFinancing/MontonioFinancingSDK.php';
 
@@ -177,7 +256,7 @@ $baseUrl = $env === 'sandbox' ? 'https://sandbox-application.montonio.com' : 'ht
 echo $baseUrl . '?access_token=' . $accessToken;
 ```
 
-### Validating the loan application
+### [Deprecated] Validating the loan application
 ```php
 require_once 'lib/MontonioFinancing/MontonioFinancingSDK.php';
 
