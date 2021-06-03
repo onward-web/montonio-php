@@ -95,7 +95,6 @@ class MontonioFinancingSDK
          * and add additional data
          */
         $paymentData = array(
-            'origin'                  => 'online',
             'loan_type'               => $this->_loan_type,
             'access_key'              => (string) $this->_accessKey,
             'currency'                => (string) $this->_paymentData['currency'],
