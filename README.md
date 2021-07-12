@@ -145,6 +145,7 @@ $montonioFinancing = new MontonioFinancingSDK(
 
 $paymentData = array(
     'origin'                    => 'online',
+    'loan_type'                 => 'hire_purchase',
     'access_key'                => $accessKey,
     'currency'                  => 'EUR',
     'merchant_name'             => 'My Store OÜ',
