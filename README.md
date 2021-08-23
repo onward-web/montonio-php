@@ -145,7 +145,7 @@ $montonioSplit = new MontonioSplitSDK(
 
 $paymentData = array(
     'origin'                    => 'online',
-    'loan_type'                 => 'split',
+    'loan_type'                 => 'slice',
     'access_key'                => $accessKey,
     'currency'                  => 'EUR',
     'merchant_name'             => 'My Store OÜ',
