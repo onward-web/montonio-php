@@ -11,7 +11,7 @@ Here you can find some code which hopefully makes integrating with [Montonio](ht
 
 ## Montonio Payments
 
-### Fetching the list of banks and credit card processors
+### Fetching the List of Banks and Credit Card Processors
 ```php
     require_once 'lib/MontonioPayments/MontonioPaymentsSDK.php';
 
@@ -33,7 +33,7 @@ Here you can find some code which hopefully makes integrating with [Montonio](ht
 ?>
 ```
 
-### Showing the list of banks at checkout
+### Showing the List of Banks at Checkout
 ```html
 <link type="text/css" rel="stylesheet" href="lib/MontonioPayments/assets/css/grid_logos.css">
 <script src="lib/MontonioPayments/assets/js/montonio-payment-handle.js"></script>
@@ -60,7 +60,7 @@ $html = $checkout->get_description_html();
 echo $html;
 ```
 
-### Starting the payment
+### Starting the Payment
 ```php
 require_once 'lib/MontonioPayments/MontonioPaymentsSDK.php';
 
@@ -99,7 +99,7 @@ $paymentUrl = $sdk->getPaymentUrl();
 echo $paymentUrl;
 ```
 
-### Validating the payment
+### Validating the Payment
 If the response does not have the ```payment_token``` query parameter, then the payment did not reach a verdict.
 This can happen if the user simply closed the payment application and returned to cart.
 
@@ -129,7 +129,7 @@ if (
 
 ## Montonio Split
 
-### Starting the Split application
+### Starting the Split Application
 ```php
 require_once 'lib/MontonioSplit/MontonioSplitSDK.php';
 
@@ -175,11 +175,37 @@ $montonioSplit->setPaymentData($paymentData);
 $paymentUrl = $montonioSplit->getPaymentUrl();
 ```
 
+### Validating the Split Application
+
+```php
+require_once 'lib/MontonioPayments/MontonioSplitSDK.php';
+
+// original order ID passed to merchant_reference
+$orderID = 'my-order-id-1';
+
+// We send the payment_token query parameter upon successful payment
+// This is both with merchant_notification_url and merchant_return_url
+$token     = $_REQUEST['payment_token'];
+$secretKey = 'your_secret_key';
+
+$decoded = MontonioSplitSDK::decodePaymentToken($token, $secretKey);
+
+if (
+    $decoded->access_key === 'merchant_access_key' &&
+    $decoded->merchant_reference === $orderID &&
+    $decoded->status === 'finalized'
+) {
+    // Payment completed
+} else {
+    // Payment not completed
+}
+```
+
 
 
 ## Montonio Financing
 
-### Starting the financing application
+### Starting the Financing Application
 ```php
 require_once 'lib/MontonioFinancing/MontonioFinancingSDK.php';
 
@@ -227,12 +253,10 @@ $paymentUrl = $montonioFinancing->getPaymentUrl();
 echo $paymentUrl;
 ```
 
-### Validating the financing application
+### Validating the Financing Application
 
 ```php
 require_once 'lib/MontonioPayments/MontonioFinancingSDK.php';
-
-$secretKey = 'your_secret_key';
 
 // original order ID passed to merchant_reference
 $orderID = 'my-order-id-1';
@@ -259,7 +283,7 @@ if (
 ## [DEPRECATED] Montonio Financing V1
 Please see the section above to integrate with Montonio Financing. This code here is to preserve examples for pre-existing integrations.
 
-### [Deprecated] Starting the loan application
+### [Deprecated] Starting the Loan Application
 ```php
 require_once 'lib/MontonioFinancing/MontonioFinancingSDK.php';
 
@@ -307,7 +331,7 @@ $baseUrl = $env === 'sandbox' ? 'https://sandbox-application.montonio.com' : 'ht
 echo $baseUrl . '?access_token=' . $accessToken;
 ```
 
-### [Deprecated] Validating the loan application
+### [Deprecated] Validating the Loan Application
 ```php
 require_once 'lib/MontonioFinancing/MontonioFinancingSDK.php';
 
