@@ -127,6 +127,56 @@ if (
 }
 ```
 
+## Montonio Split
+
+### Starting the Split application
+```php
+require_once 'lib/MontonioSplit/MontonioSplitSDK.php';
+
+$accessKey = 'your_access_key';
+$secretKey = 'your_secret_key';
+$env       = 'sandbox'; // or 'production'
+
+$montonioSplit = new MontonioSplitSDK(
+    $accessKey,
+    $secretKey,
+    $env
+);
+
+$paymentData = array(
+    'origin'                    => 'online',
+    'loan_type'                 => 'split',
+    'access_key'                => $accessKey,
+    'currency'                  => 'EUR',
+    'merchant_name'             => 'My Store OÜ',
+    'merchant_reference'        => 'my-order-id-1',
+    'checkout_first_name'       => 'Montonio',
+    'checkout_last_name'        => 'Test',
+    'checkout_email'            => 'test@montonio.com',
+    'checkout_city'             => 'Tallinn',
+    'checkout_address'          => 'Customer Address',
+    'checkout_postal_code'      => '11111',
+    'checkout_phone_number'     => '+37255555555',
+    'merchant_return_url'       => 'https://my-store/return', // Where to redirect the checkout to after the payment
+    'merchant_notification_url' => 'https://my-store/notify', // We will send a webhook after the payment is complete,
+    'preselected_loan_period'   => 3, // Optional [values 1, 2 or 3]
+    'checkout_products'         => array(),
+    'preselected_locale'        => 'et'
+);
+
+// Add products
+$paymentData['checkout_products'][] = array(
+    'quantity'      => (int) 1,
+    'product_name'  => 'Some product name',
+    'product_price' => 35.52,
+);
+
+$montonioSplit->setPaymentData($paymentData);
+$paymentUrl = $montonioSplit->getPaymentUrl();
+```
+
+
+
 ## Montonio Financing
 
 ### Starting the financing application
@@ -134,7 +184,7 @@ if (
 require_once 'lib/MontonioFinancing/MontonioFinancingSDK.php';
 
 $accessKey = 'your_access_key';
-$secretKey = 'your_environment';
+$secretKey = 'your_secret_key';
 $env       = 'sandbox'; // or 'production'
 
 $montonioFinancing = new MontonioFinancingSDK(
