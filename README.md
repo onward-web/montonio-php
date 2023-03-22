@@ -1,13 +1,26 @@
 # montonio-php
 PHP library for the Montonio API
+> The official montonio-php package has a very outdated development approach. Therefore, we have created a fork that will help you use montonio in more modern php frameworks and cms
 
-Here you can find some code which hopefully makes integrating with [Montonio](https://montonio.com) a bit easier. For the full documentation on how all these blocks work together, have a look at our documentation, which can be found here:
 
-[Montonio Payments](https://payments-docs.montonio.com)
+## Install
 
-[Montonio Financing](https://developer.montonio.com)
+Add to composer.json
 
-> If you are using a popular eCommerce platform such as WooCommerce, have a look at our [integrations](https://montonio.com/integrations) section to see if we already have a module ready for you.
+```json
+	"repositories": [
+		...
+		{
+            "type": "vcs",
+            "url":  "https://github.com/onward-web/montonio-php.git"
+        },
+		...
+	],
+```
+Then install the package
+>composer require montonio/montonio-php "dev-onward"
+
+
 
 ## Montonio Payments
 
