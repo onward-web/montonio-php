@@ -26,7 +26,7 @@ Then install the package
 
 ### Fetching the List of Banks and Credit Card Processors
 ```php
-    require_once 'lib/MontonioPayments/MontonioPaymentsSDK.php';
+    use Montonio\Payments\MontonioPaymentsSDK;    
 
     $accessKey = 'your_access_key';
     $secretKey = 'your_secret_key';
@@ -59,8 +59,7 @@ Then install the package
  * Please do not fetch the banklist every time you load the checkout.
  */
 // *** @var $banklist ***
-
-require_once 'lib/MontonioPayments/MontonioPaymentsCheckout.php';
+use Montonio\Payments\MontonioPaymentsCheckout;
 
 $checkout = new MontonioPaymentsCheckout();
 $checkout->set_description('Pay with your bank');
@@ -75,7 +74,7 @@ echo $html;
 
 ### Starting the Payment
 ```php
-require_once 'lib/MontonioPayments/MontonioPaymentsSDK.php';
+use Montonio\Payments\MontonioPaymentsSDK;
 
 $accessKey = 'your_access_key';
 $secretKey = 'your_secret_key';
@@ -117,7 +116,7 @@ If the response does not have the ```payment_token``` query parameter, then the 
 This can happen if the user simply closed the payment application and returned to cart.
 
 ```php
-require_once 'lib/MontonioPayments/MontonioPaymentsSDK.php';
+use Montonio\Payments\MontonioPaymentsSDK;
 
 // original order ID passed to merchant_reference
 $orderID = 'my-order-id-1';
@@ -144,7 +143,7 @@ if (
 
 ### Starting the Split Application
 ```php
-require_once 'lib/MontonioSplit/MontonioSplitSDK.php';
+use Montonio\Split\MontonioSplitSDK;
 
 $accessKey = 'your_access_key';
 $secretKey = 'your_secret_key';
@@ -191,7 +190,7 @@ $paymentUrl = $montonioSplit->getPaymentUrl();
 ### Validating the Split Application
 
 ```php
-require_once 'lib/MontonioPayments/MontonioSplitSDK.php';
+use Montonio\Split\MontonioSplitSDK;
 
 // original order ID passed to merchant_reference
 $orderID = 'my-order-id-1';
@@ -220,7 +219,7 @@ if (
 
 ### Starting the Financing Application
 ```php
-require_once 'lib/MontonioFinancing/MontonioFinancingSDK.php';
+use Montonio\Financing\MontonioFinancingSDK\MontonioFinancingSDK;
 
 $accessKey = 'your_access_key';
 $secretKey = 'your_secret_key';
@@ -269,7 +268,7 @@ echo $paymentUrl;
 ### Validating the Financing Application
 
 ```php
-require_once 'lib/MontonioPayments/MontonioFinancingSDK.php';
+use Montonio\Financing\MontonioFinancingSDK\MontonioFinancingSDK;
 
 // original order ID passed to merchant_reference
 $orderID = 'my-order-id-1';
@@ -289,88 +288,5 @@ if (
     // Payment completed
 } else {
     // Payment not completed
-}
-```
-
-
-## [DEPRECATED] Montonio Financing V1
-Please see the section above to integrate with Montonio Financing. This code here is to preserve examples for pre-existing integrations.
-
-### [Deprecated] Starting the Loan Application
-```php
-require_once 'lib/MontonioFinancing/MontonioFinancingSDK.php';
-
-$accessKey = 'your_access_key';
-$secretKey = 'your_secret_key';
-$env       = 'sandbox'; // or 'production'
-
-$montonioFinancing = new MontonioFinancingSDK(
-    $accessKey,
-    $secretKey,
-    $env
-);
-
-// Prepare data for loan application
-$data = array(
-    'origin'               => 'online',
-    'merchant_reference'   => 'my-order-id-2', // The Order Id in your system
-    'customer_first_name'  => 'Montonio',
-    'customer_last_name'   => 'Test',
-    'customer_email'       => 'test@montonio.com',
-    'customer_city'        => 'Tallinn',
-    'customer_address'     => 'Customer Address',
-    'customer_postal_code' => '11111',
-    'products'             => array(),
-    'notification_url'     => 'https://my-store/notify', // We will send a webhook after the payment is complete
-    'callback_url'         => 'https://my-store/return', // Where to redirect the customer to after the payment
-);
-
-// Add products
-$data['products'][] = array(
-    'quantity'      => (int) 1,
-    'product_name'  => 'Some product name',
-    'product_price' => 35.52,
-);
-
-// Get application draft
-$draftResult = $montonioFinancing->post_montonio_application_draft(json_encode($data));
-
-// handle draft request response
-$accessToken = ($draftResult['status'] === 'SUCCESS') ? $draftResult['data']->access_token : null;
-
-// Redirect to Montonio Financing
-$baseUrl = $env === 'sandbox' ? 'https://sandbox-application.montonio.com' : 'https://application.montonio.com';
-
-echo $baseUrl . '?access_token=' . $accessToken;
-```
-
-### [Deprecated] Validating the Loan Application
-```php
-require_once 'lib/MontonioFinancing/MontonioFinancingSDK.php';
-
-// original order ID passed to merchant_reference
-$orderID = 'my-order-id-2';
-
-$accessKey = 'your_access_key';
-$secretKey = 'your_secret_key';
-$env       = 'sandbox'; // or 'production'
-
-$montonioFinancing = new MontonioFinancingSDK(
-    $accessKey,
-    $secretKey,
-    $env
-);
-
-$request = $montonioFinancing->get_montonio_application($orderID);
-
-if ($request['status'] === 'SUCCESS') {
-
-    $response = $request['data'];
-
-    if ($response->status === 'signed') {
-        // Payment completed
-    } else {
-        // Payment not completed
-    }
 }
 ```
