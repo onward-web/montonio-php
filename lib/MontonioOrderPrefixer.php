@@ -1,13 +1,13 @@
-<?php 
-
+<?php
+namespace Montonio;
 /**
- * In multistore solutions, adding a prefix to an order ID 
+ * In multistore solutions, adding a prefix to an order ID
  * is a common way to distinguish between orders from different stores
  * in the Montonio Partner System.
- * 
+ *
  * This class provides methods to add and remove this prefix in a uniform way
  */
-class MontonioOrderPrefixer 
+class MontonioOrderPrefixer
 {
     const SEPARATOR = '-';
 

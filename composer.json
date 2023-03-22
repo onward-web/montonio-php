@@ -1,0 +1,24 @@
+{
+  "name": "montonio/montonio-php",
+  "type": "library",
+  "description": "Montonio Payment Gateway",
+  "keywords": ["montonio","payment","gateway","php","veltix","estonia","lithuania","latvia","finland","payment processing","api"],
+  "homepage": "https://montonio.com",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Montonio & Kristen L.",
+      "homepage": "https://montonio.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=7.3.0",
+    "firebase/php-jwt": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Montonio\\": "lib/"
+    }
+  }
+}

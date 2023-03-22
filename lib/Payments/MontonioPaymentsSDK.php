@@ -1,9 +1,11 @@
 <?php
 
+namespace Montonio\Payments;
 /**
  * We use php-jwt for JWT creation
  */
-require_once 'jwt/JWT.php';
+use Firebase\JWT\JWT;
+
 
 /**
  * SDK for Montonio Payments.
@@ -11,7 +13,7 @@ require_once 'jwt/JWT.php';
  */
 class MontonioPaymentsSDK
 {
-    
+
     /**
      * Payment Data for Montonio Payment Token generation
      * @see https://payments-docs.montonio.com/#generating-the-payment-token
@@ -196,12 +198,12 @@ class MontonioPaymentsSDK
     /**
      * Fetch info about banks and card processors that
      * can be shown to the customer at checkout.
-     * 
-     * Banks have different identifiers for separate regions, 
+     *
+     * Banks have different identifiers for separate regions,
      * but the identifier for card payments is uppercase CARD
      * in all regions.
      * @see MontonioPaymentsCheckout::$bankList
-     * 
+     *
      * @return array Array containing the status of the request and the banklist
      */
     public function fetchBankList()

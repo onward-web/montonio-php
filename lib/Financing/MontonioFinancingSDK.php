@@ -1,9 +1,12 @@
 <?php
 
+namespace Montonio\Financing;
+
+
 /**
  * We use php-jwt for JWT creation
  */
-require_once 'jwt/JWT.php';
+use Firebase\JWT\JWT;
 
 /**
  * Montonio Financing SDK

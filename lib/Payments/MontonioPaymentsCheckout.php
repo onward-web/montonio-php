@@ -1,26 +1,6 @@
 <?php
 
-/**
- * Usage example:
- * -------------------------------------------------------------------------
- * IMPORTANT! 
- * Please have the $banklist fetched from 
- * MontonioPaymentsSDK::fetchBankList() beforehand and saved/cached to 
- * your database.
- * Please do not fetch the banklist every time you load the checkout.
- * -------------------------------------------------------------------------
- * $banklist = ...
- * 
- * $checkout = new MontonioPaymentsCheckout();
- * $checkout->set_description('Pay with your bank');
- * $checkout->set_preferred_country('EE');
- * $checkout->set_payment_handle_style('grid_logos');
- * $checkout->set_banklist($banklist);
- * 
- * $html = $checkout->get_description_html();
- * // Render the HTML to your page
- * ...
- */ 
+namespace Montonio\Payments;
 
 /**
  * This class controls the UI side of the Checkout page.
@@ -53,14 +33,14 @@ class MontonioPaymentsCheckout
      * @var string
      */
     protected $_preferred_country;
-    
+
     /**
      * The default description shown at checkout if the Payment Handle Style is not grid or list
      *
      * @var string
      */
     protected $_description;
-    
+
     /**
      * Banks to show at checkout
      * @see MontonioPaymentsSDK::fetchBankList()
@@ -68,7 +48,7 @@ class MontonioPaymentsCheckout
      * @var object
      */
     protected $_bankList;
-    
+
     /**
      * Get the HTMLstring for checkout by Payment Handle Style
      *
@@ -91,7 +71,7 @@ class MontonioPaymentsCheckout
     }
 
     /**
-     * Get an HTMLstring for Payment Handle Style: grid_logos 
+     * Get an HTMLstring for Payment Handle Style: grid_logos
      *
      * @return string The HTML for checkout
      */
@@ -99,7 +79,7 @@ class MontonioPaymentsCheckout
     {
         $preselectedAspsp = '<input type="hidden" name="montonio_payments_preselected_aspsp" id="montonio_payments_preselected_aspsp">';
         $description = $this->get_dropdown_html($regions);
-    
+
         $description .= '<div id="montonio-payments-description" class="montonio-aspsp-grid montonio-aspsp-grid-logos">';
         foreach ($regions as $r => $list) {
             foreach ($list as $key => $value) {
@@ -108,12 +88,12 @@ class MontonioPaymentsCheckout
             }
         }
         $description .= '</div>';
-            
+
         return $preselectedAspsp . $description;
     }
 
     /**
-     * Get an HTMLstring for Payment Handle Style: list_logos 
+     * Get an HTMLstring for Payment Handle Style: list_logos
      *
      * @return string The HTML for checkout
      */
@@ -122,7 +102,7 @@ class MontonioPaymentsCheckout
         $preselectedAspsp = '<input type="hidden" name="montonio_payments_preselected_aspsp" id="montonio_payments_preselected_aspsp">';
         $description = $this->get_dropdown_html($regions);
         $description .= '<ul id="montonio-payments-description" class="montonio-aspsp-ul montonio-aspsp-list-logos">';
-        
+
         foreach ($regions as $r => $list) {
             foreach ($list as $key => $value) {
                 $description .= '<li data-aspsp="' . $value->bic . '" class="aspsp-region-'. $r .' montonio-aspsp-li montonio-aspsp '. ($r == $this->get_preferred_country() ? '' : 'montonio-hidden') .'"><img class="montonio-aspsp-li-img" src="' . $value->logo_url . '"></li>';
@@ -133,7 +113,7 @@ class MontonioPaymentsCheckout
     }
 
     /**
-     * Get an HTMLstring for Payment Handle Style: description 
+     * Get an HTMLstring for Payment Handle Style: description
      *
      * @return string The HTML for checkout
      */
@@ -146,7 +126,7 @@ class MontonioPaymentsCheckout
      * Get the country selector dropdown HTML
      *
      * @param array $regions The regions dictionary
-     * 
+     *
      * @return string
      */
     protected function get_dropdown_html($regions) {
@@ -162,7 +142,7 @@ class MontonioPaymentsCheckout
     // =========================================================================
     // Getters and setters
     // =========================================================================
-    
+
     /**
      * @return object
      */
@@ -170,7 +150,7 @@ class MontonioPaymentsCheckout
     {
         return $this->_payment_handle_style;
     }
-    
+
     /**
      * @param object $payment_handle_style
      */
@@ -178,7 +158,7 @@ class MontonioPaymentsCheckout
     {
         $this->_payment_handle_style = $payment_handle_style;
     }
-    
+
     /**
      * JSON-decode bankList
      *
@@ -188,11 +168,11 @@ class MontonioPaymentsCheckout
     {
         $this->_bankList = json_decode($banklistJson);
     }
-    
+
     public function set_description($description) {
         $this->_description = $description;
     }
-    
+
     public function get_description() {
         return $this->_description;
     }
@@ -207,7 +187,7 @@ class MontonioPaymentsCheckout
 
     /**
      * Set the translations for country dropdown
-     * 
+     *
      * @param array $regions
      * @example array(
      *      'EE' => 'Eesti',
@@ -215,7 +195,7 @@ class MontonioPaymentsCheckout
      *      'LV' => 'Latvija',
      *      'LT' => 'Lietuva'
      * )
-     * 
+     *
      * @return void
      */
     public function set_regions($regions) {

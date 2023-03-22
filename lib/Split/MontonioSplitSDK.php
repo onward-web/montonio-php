@@ -1,9 +1,10 @@
 <?php
 
+namespace Montonio\Split;
 /**
  * We use php-jwt for JWT creation
  */
-require_once 'jwt/JWT.php';
+use Firebase\JWT\JWT;
 
 /**
  * Process order data after place order clicked
@@ -94,7 +95,7 @@ class MontonioSplitSDK
         // add expiry to payment data for JWT validation
         $exp                = time() + (10 * 60);
         $paymentData['exp'] = $exp;
-        
+
         return Firebase\JWT\JWT::encode($paymentData, $this->_secretKey);
     }
 

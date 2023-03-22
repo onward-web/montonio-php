@@ -1,6 +1,7 @@
 <?php
+namespace Montonio\Financing;
 
-require_once 'MontonioFinancingSDK.php';
+use Montonio\Financing\MontonioFinancingSDK;
 
 class MontonioSliceSDK extends MontonioFinancingSDK
 {
