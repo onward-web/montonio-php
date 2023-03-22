@@ -219,7 +219,7 @@ if (
 
 ### Starting the Financing Application
 ```php
-use Montonio\Financing\MontonioFinancingSDK\MontonioFinancingSDK;
+use Montonio\Financing\MontonioFinancingSDK;
 
 $accessKey = 'your_access_key';
 $secretKey = 'your_secret_key';
@@ -268,7 +268,7 @@ echo $paymentUrl;
 ### Validating the Financing Application
 
 ```php
-use Montonio\Financing\MontonioFinancingSDK\MontonioFinancingSDK;
+use Montonio\Financing\MontonioFinancingSDK;
 
 // original order ID passed to merchant_reference
 $orderID = 'my-order-id-1';
