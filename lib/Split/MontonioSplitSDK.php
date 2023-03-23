@@ -96,7 +96,7 @@ class MontonioSplitSDK
         $exp                = time() + (10 * 60);
         $paymentData['exp'] = $exp;
 
-        return Firebase\JWT\JWT::encode($paymentData, $this->_secretKey);
+        return JWT::encode($paymentData, $this->_secretKey);
     }
 
     /**
@@ -113,8 +113,8 @@ class MontonioSplitSDK
 
     public static function decodePaymentToken($token, $secretKey)
     {
-        Firebase\JWT\JWT::$leeway = 60 * 5; // 5 minutes
-        return Firebase\JWT\JWT::decode($token, $secretKey, array('HS256'));
+        JWT::$leeway = 60 * 5; // 5 minutes
+        return JWT::decode($token, $secretKey, array('HS256'));
     }
 
     static function getBearerToken($accessKey, $secretKey)
@@ -123,6 +123,6 @@ class MontonioSplitSDK
             'access_key' => $accessKey,
         );
 
-        return Firebase\JWT\JWT::encode($data, $secretKey);
+        return JWT::encode($data, $secretKey);
     }
 }
